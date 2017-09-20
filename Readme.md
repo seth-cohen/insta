@@ -10,7 +10,7 @@ with the phar location in your path then you don't really need this if not read 
    php composer.phar install
   ```
   - This will ensure that you have all of the correct dependencies installed on the system
-  - save the applicants.sqlite3 file in `<application_root>/db` directory
+  - save the applicants.sqlite3 file in `<application_root>/db` directory that you will need to create
   - Once installed you should just have to:
   ```
     php composer.phar start
