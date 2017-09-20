@@ -23,25 +23,29 @@ class ShopperSQLDAO implements ShopperDAOInterface {
    * @return int
    */
   public function save(\IC\Models\ShopperModel $shopper): int {
-    $sql = '
+    try {
+      $sql = '
       INSERT INTO applicants 
       (first_name, last_name, email, phone, workflow_state, created_at, updated_at)
       VALUES (:firstName, :lastName, :emailAddress, :phone, :workflow, DATETIME(), DATETIME());
     ';
 
-    $statement = $this->pdo->prepare($sql);
+      $statement = $this->pdo->prepare($sql);
 
-    if (empty($statement)) {
+      if (empty($statement)) {
+        return 0;
+      }
+
+      $statement->bindValue(':firstName', $shopper->getFirstName(), \PDO::PARAM_STR);
+      $statement->bindValue(':lastName', $shopper->getLastName(), \PDO::PARAM_STR);
+      $statement->bindValue(':emailAddress', $shopper->getEmailAddress(), \PDO::PARAM_STR);
+      $statement->bindValue(':phone', $shopper->getPhone(), \PDO::PARAM_STR);
+      $statement->bindValue(':workflow', $shopper->getWorkflowState(), \PDO::PARAM_STR);
+
+      return $statement->execute() ? (int)$this->pdo->lastInsertId() : 0;
+    } catch (\PDOException $e) {
       return 0;
     }
-
-    $statement->bindValue(':firstName', $shopper->getFirstName(), \PDO::PARAM_STR);
-    $statement->bindValue(':lastName', $shopper->getLastName(), \PDO::PARAM_STR);
-    $statement->bindValue(':emailAddress', $shopper->getEmailAddress(), \PDO::PARAM_STR);
-    $statement->bindValue(':phone', $shopper->getPhone(), \PDO::PARAM_STR);
-    $statement->bindValue(':workflow', $shopper->getWorkflowState(), \PDO::PARAM_STR);
-
-    return $statement->execute() ? (int)$this->pdo->lastInsertId() : 0;
   }
 
   /**
@@ -52,7 +56,8 @@ class ShopperSQLDAO implements ShopperDAOInterface {
    * @return bool
    */
   public function update(\IC\Models\ShopperModel $shopper): int {
-    $sql = '
+    try {
+      $sql = '
       UPDATE applicants SET
       first_name = :firstName, 
       last_name = :lastName, 
@@ -63,20 +68,23 @@ class ShopperSQLDAO implements ShopperDAOInterface {
       WHERE id = :id
     ';
 
-    $statement = $this->pdo->prepare($sql);
+      $statement = $this->pdo->prepare($sql);
 
-    if (empty($statement)) {
-      return false;
+      if (empty($statement)) {
+        return false;
+      }
+
+      $statement->bindValue(':firstName', $shopper->getFirstName(), \PDO::PARAM_STR);
+      $statement->bindValue(':lastName', $shopper->getLastName(), \PDO::PARAM_STR);
+      $statement->bindValue(':emailAddress', $shopper->getEmailAddress(), \PDO::PARAM_STR);
+      $statement->bindValue(':phone', $shopper->getPhone(), \PDO::PARAM_STR);
+      $statement->bindValue(':workflow', $shopper->getWorkflowState(), \PDO::PARAM_STR);
+      $statement->bindValue(':id', $shopper->getId(), \PDO::PARAM_INT);
+
+      return $statement->execute();
+    } catch (\PDOException $e) {
+      //swallow it
     }
-
-    $statement->bindValue(':firstName', $shopper->getFirstName(), \PDO::PARAM_STR);
-    $statement->bindValue(':lastName', $shopper->getLastName(), \PDO::PARAM_STR);
-    $statement->bindValue(':emailAddress', $shopper->getEmailAddress(), \PDO::PARAM_STR);
-    $statement->bindValue(':phone', $shopper->getPhone(), \PDO::PARAM_STR);
-    $statement->bindValue(':workflow', $shopper->getWorkflowState(), \PDO::PARAM_STR);
-    $statement->bindValue(':id', $shopper->getId(), \PDO::PARAM_INT);
-
-    return $statement->execute();
   }
 
   /**
@@ -126,18 +134,22 @@ class ShopperSQLDAO implements ShopperDAOInterface {
    * @return array|mixed
    */
   public function getByEmail(string $emailAddress) {
-    $sql = $this->getShopperSelectSql();
-    $sql .= ' WHERE email = :emailAddress';
+    try {
+      $sql = $this->getShopperSelectSql();
+      $sql .= ' WHERE email = :emailAddress';
 
-    $statement = $this->pdo->prepare($sql);
+      $statement = $this->pdo->prepare($sql);
 
-    if (empty($statement)) {
-      return [];
+      if (empty($statement)) {
+        return [];
+      }
+
+      $statement->bindValue(':emailAddress', $emailAddress, \PDO::PARAM_STR);
+
+      return $statement->execute() ? $statement->fetch() : [];
+    } catch (\PDOException $e) {
+      // swallow it
     }
-
-    $statement->bindValue(':emailAddress', $emailAddress, \PDO::PARAM_STR);
-
-    return $statement->execute() ? $statement->fetch() : [];
   }
 
   /**

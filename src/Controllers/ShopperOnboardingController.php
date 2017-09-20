@@ -183,14 +183,17 @@ class ShopperOnboardingController {
       $shopper = $this->shopperService->getShopperByEmail($email);
     }
 
-    if (empty($shopper)) {
+    // Added the false flag in case you are running this without the DB - you can still progess to confirmation
+    if (empty($shopper) && false) {
       $this->logger->debug('Couldn\'t find shopper to update', ['emailAddress' => $email]);
 
       return $this->background_check($request, $response, ['errors' => ['Error processing request please try again']]);
     }
 
-    $shopper->setWorkflowState('backgound_authorized');
-    $this->shopperService->updateShopper($shopper);
+    if (!empty($shopper)) {
+      $shopper->setWorkflowState('backgound_authorized');
+      $this->shopperService->updateShopper($shopper);
+    }
 
     return $response->withRedirect('/shopper/confirmed');
   }
