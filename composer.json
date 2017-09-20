@@ -6,7 +6,8 @@
         "slim/slim": "^3.8",
         "slim/twig-view": "^2.2",
         "monolog/monolog": "^1.23",
-        "php": "^7.1"
+        "php": "^7.1",
+        "bryanjhv/slim-session": "^3.3"
     },
     "authors": [
         {
@@ -14,6 +15,9 @@
             "email": "seth.h.cohen@gmail.com"
         }
     ],
+    "autoload": {
+        "psr-4": {"IC\\": "src/"}
+    },
     "scripts": {
         "start": "php -S 0.0.0.0:8080 -t public public/index.php"
     }

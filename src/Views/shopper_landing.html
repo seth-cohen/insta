@@ -26,26 +26,26 @@
     <div class="row">
       <div class="card grey lighten-1 col s12 m6">
         <div class="icon-block">
-          <h4 class="center brown-text"><i class="material-icons">av_timer</i></h4>
+          <h4 class="center green-text text-darken-2"><i class="material-icons">av_timer</i></h4>
           <h5 class="center">Be Independent</h5>
 
           <p class="light center">Schedule work around your own life.</p>
         </div>
         <div class="icon-block">
-          <h4 class="center brown-text"><i class="material-icons">group</i></h4>
+          <h4 class="center green-text text-darken-2"><i class="material-icons">mood</i></h4>
           <h5 class="center">Have Fun</h5>
 
           <p class="light center">Spend time shopping, exploring new things and being active</p>
         </div>
         <div class="icon-block">
-          <h4 class="center brown-text"><i class="material-icons">settings</i></h4>
+          <h4 class="center green-text text-darken-2"><i class="material-icons">monetization_on</i></h4>
           <h5 class="center">Earn Extra Income</h5>
 
           <p class="light center">Get paid weekly. Work Sundays to maximize your hours and pay</p>
         </div>
       </div>
 
-      <form class="col s12 m6" action="/shopper/landing" method="post">
+      <form class="card grey lighten-5 col s12 m6" action="/shopper/landing" method="post">
         <div class="row">
           <div class="input-field col s6">
             <input id="first_name" name="first_name" value="{{shopper.firstName}}" type="text" class="validate">
@@ -58,11 +58,11 @@
         </div>
         <div class="row">
           <div class="input-field col s12">
-            <input id="email" type="email" class="validate">
+            <input id="email" name="email" value="{{shopper.emailAddress}}" type="email" class="validate">
             <label for="email" data-error="Please enter valid email address">Email</label>
           </div>
         </div>
-        <button class="btn waves-effect waves-light green darken-2" type="submit" name="action">Submit
+        <button class="btn waves-effect waves-light green darken-2" type="submit">Submit
           <i class="material-icons right">send</i>
         </button>
       </form>

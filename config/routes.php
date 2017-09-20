@@ -1,12 +1,13 @@
 <?php
 
+// View Landing
 $app->get(
     '/shopper/landing',
-    function($request, $response) {
-      return $this->view->render(
-          $response,
-          'shopper_landing.html',
-          ['name' => 'InstaCart']
-      );
-    }
+    \IC\Controllers\OnboardingController::class . ':landing'
 )->setName('shopper-landing');
+
+// Form submit
+$app->post(
+    '/shopper/landing/submit',
+    \IC\Controllers\OnboardingController::class . ':landing'
+)->setName('shopper-landing-submit');

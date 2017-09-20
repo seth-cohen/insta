@@ -42,3 +42,17 @@ $container['pdo'] = function(\Slim\Container $c) {
     throw new \ErrorException($e->getMessage());
   }
 };
+
+// Registering controllers with the container. The reason for this, is somewhat of a limitation of Slim. This allows
+// us to control (no pun intended) and document the dependencies required by our controller otherwise the framework will
+// inject the entire container (which would be essentially a super global
+$container[\IC\Controllers\OnboardingController::class] = function ($c) {
+  $pdo = $c->get('pdo');
+  $shopperDAO = new \IC\DAOs\ShopperSQLDAO($pdo);
+  $shopperService = new \IC\Services\ShopperService($shopperDAO);
+
+  $view = $c->get('view');
+  $logger = $c->get('logger');
+
+  return new \IC\Controllers\ShopperOnboardingController($view, $shopperService, $logger);
+};
