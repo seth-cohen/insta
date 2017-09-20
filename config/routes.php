@@ -3,8 +3,10 @@
 $app->get(
     '/shopper/landing',
     function($request, $response) {
-      $response->getBody()->write('Hello, World');
-
-      return $response;
+      return $this->view->render(
+          $response,
+          'shopper_landing.html',
+          ['name' => 'InstaCart']
+      );
     }
 )->setName('shopper-landing');

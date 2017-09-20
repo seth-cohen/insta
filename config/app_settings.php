@@ -18,7 +18,7 @@ return [
             'path' => __DIR__ . '/../db/applicants.sqlite3'
         ],
         'view' => [
-            'templates.path' => __DIR__ . '/../src/Views/',
+            'templates_path' => __DIR__ . '/../src/Views/',
             'cache_path' => __DIR__ . '/../cache/twig'
         ]
     ]

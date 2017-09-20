@@ -1,0 +1,75 @@
+{% extends "layout.html" %}
+{% block title %}Shopper Landing{% endblock %}
+
+{% block content %}
+<div id="index-banner" class="parallax-container">
+  <div class="section no-pad-bot">
+    <div class="container">
+      <br><br>
+      <h1 class="header center green-text text-darken-1">Become A Shopper</h1>
+      <div class="row center">
+        <h5 class="header col s12 light">Earn money shopping and delivering groceries, giving customers more time to do what they love.</h5>
+      </div>
+      <div class="row center">
+        <a href="http://materializecss.com/getting-started.html" id="download-button" class="btn-large waves-effect waves-light teal lighten-1">Get Started</a>
+      </div>
+      <br><br>
+
+    </div>
+  </div>
+  <div class="parallax"><img src="https://d2nkqaulr5muje.cloudfront.net/assets/applicants/landing_page/landing_page_bg-min-2dbf0751ab4e800d44d6981383d7ce4677046bf412bdc3fd41a822b3d18c1a0b.jpg" alt="Shopper Background 1"></div>
+</div>
+
+<div class="container">
+  <div class="section">
+
+    <div class="row">
+      <div class="card grey lighten-1 col s12 m6">
+        <div class="icon-block">
+          <h4 class="center brown-text"><i class="material-icons">av_timer</i></h4>
+          <h5 class="center">Be Independent</h5>
+
+          <p class="light center">Schedule work around your own life.</p>
+        </div>
+        <div class="icon-block">
+          <h4 class="center brown-text"><i class="material-icons">group</i></h4>
+          <h5 class="center">Have Fun</h5>
+
+          <p class="light center">Spend time shopping, exploring new things and being active</p>
+        </div>
+        <div class="icon-block">
+          <h4 class="center brown-text"><i class="material-icons">settings</i></h4>
+          <h5 class="center">Earn Extra Income</h5>
+
+          <p class="light center">Get paid weekly. Work Sundays to maximize your hours and pay</p>
+        </div>
+      </div>
+
+      <form class="col s12 m6" action="/shopper/landing" method="post">
+        <div class="row">
+          <div class="input-field col s6">
+            <input id="first_name" name="first_name" value="{{shopper.firstName}}" type="text" class="validate">
+            <label for="first_name">First Name</label>
+          </div>
+          <div class="input-field col s6">
+            <input id="last_name" name="last_name" value="{{shopper.lastName}}" type="text" class="validate">
+            <label for="last_name">Last Name</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-field col s12">
+            <input id="email" type="email" class="validate">
+            <label for="email" data-error="Please enter valid email address">Email</label>
+          </div>
+        </div>
+        <button class="btn waves-effect waves-light green darken-2" type="submit" name="action">Submit
+          <i class="material-icons right">send</i>
+        </button>
+      </form>
+
+    </div>
+
+  </div>
+
+</div>
+{% endblock %}
