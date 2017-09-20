@@ -1,0 +1,20 @@
+{
+    "name": "sethhcohen/instacart-shopper",
+    "description": "Instacart Shopper Challenge: Landing and onboarding for prospective instacart shoppers",
+    "type": "project",
+    "require": {
+        "slim/slim": "^3.8",
+        "slim/twig-view": "^2.2",
+        "monolog/monolog": "^1.23",
+        "php": "^7.1"
+    },
+    "authors": [
+        {
+            "name": "Seth Cohen",
+            "email": "seth.h.cohen@gmail.com"
+        }
+    ],
+    "scripts": {
+        "start": "php -S 0.0.0.0:8080 -t public public/index.php"
+    }
+}
