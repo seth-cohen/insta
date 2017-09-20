@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+{% block title %}Shopper Application{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="section">
+    <div class="row">
+      {% if not errors is empty %}
+      <ul class="collection">
+        {% for key,value in errors %}
+        <li class="collection-item">{{value}}</li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+      <div class="card green lighten-4 white col s12">
+        <div class="section">
+          <div class="bg-check">
+            Trust and safety is important to us and customers. After your in-person introduction, we’ll ask you to
+            consent to a background check.
+            We value our clients as well as our Shoppers.
+            <p>
+              By clicking 'OK' below you are authorizing us to perform a background check on your behalf
+            </p>
+          </div>
+
+          <form class="" action="/shopper/background/submit" method="post">
+            <input name="approved" value="1" type="hidden"/>
+            <button class="btn waves-effect waves-light green darken-2 right" type="submit">OK
+              <i class="material-icons right">send</i>
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -2,7 +2,7 @@
 
 namespace IC\Helpers;
 
-class InputHelper {
+class ValidationHelper {
   public static function isValidEmail(string $emailAddress) {
     return filter_var($emailAddress, FILTER_VALIDATE_EMAIL);
   }

@@ -15,7 +15,14 @@ class ShopperService {
    * @todo Create a value object to represent the data needed to create a valid ShopperModel
    */
   public function create(array $data) {
-    $model = \IC\Models\ShopperModel::create($data['firstName'], $data['lastName'], $data['emailAddress']);
+    $model = \IC\Models\ShopperModel::create(
+        $data['firstName'] ?? '',
+        $data['lastName'] ?? '',
+        $data['emailAddress'] ?? '',
+        $data['phone'] ?? '',
+        $data['zipCode'] ?? null,
+        $data['workflowState'] ?? null
+    );
 
     $id = null;
     if ($model->validate()) {
@@ -24,6 +31,17 @@ class ShopperService {
     }
 
     return $model;
+  }
+
+  /**
+   * @param \IC\Models\ShopperModel $shopperModel
+   *
+   * @return mixed
+   */
+  public function updateShopper(\IC\Models\ShopperModel $shopperModel) {
+
+
+    return $shopperModel->validate() && $this->shopperDAO->update($shopperModel);
   }
 
   /**

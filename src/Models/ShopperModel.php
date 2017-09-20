@@ -12,30 +12,47 @@ class ShopperModel extends BaseModel implements \JsonSerializable {
 
   protected $emailAddress = '';
 
+  protected $phone = '';
+
+  protected $zipCode = '';
+
+  protected $workflowState = '';
+
+  protected $errors = [];
+
   /**
    * Factory method to create an "in memory" shopper model
    *
    * @param string $firstName    First name of the Shopper
    * @param string $lastName     Last name of the Shopper
    * @param string $emailAddress Emailaddress of the Shopper
+   * @param string $phoneNumber
+   * @param string $zipCode
+   * @param string $workflowState
    *
    * @return \IC\Models\ShopperModel
    */
   public static function create(
       string $firstName,
       string $lastName,
-      string $emailAddress
+      string $emailAddress,
+      string $phoneNumber,
+      string $zipCode = null,
+      string $workflowState = null
   ) {
-    $model = new static();
-    $model->firstName = $firstName;
-    $model->lastName = $lastName;
-    $model->emailAddress = $emailAddress;
+    $model                = new static();
+    $model->firstName     = $firstName;
+    $model->lastName      = $lastName;
+    $model->emailAddress  = $emailAddress;
+    $model->phone         = $phoneNumber;
+    $model->zipCode       = $zipCode;
+    $model->workflowState = $workflowState;
 
     return $model;
   }
 
   public function getId() {
-    return $this->id;
+    return (int)$this->id;
   }
 
   /**
@@ -89,10 +106,95 @@ class ShopperModel extends BaseModel implements \JsonSerializable {
   }
 
   /**
+   * Set the email address
+   *
    * @param string $email
+   *
+   * @return $this
    */
   public function setEmailAddress(string $email) {
+    $this->emailAddress = $email;
 
+    return $this;
+  }
+
+  /**
+   * @param string $phone
+   *
+   * @return $this
+   */
+  public function setPhone(string $phone) {
+    $this->lastName = $phone;
+
+    return $this;
+  }
+
+  /**
+   * @return string
+   */
+  public function getPhone() {
+    return $this->phone;
+  }
+
+  /**
+   * @param string $zipCode
+   *
+   * @return $this
+   */
+  public function setZipCode(string $zipCode) {
+    $this->lastName = $zipCode;
+
+    return $this;
+  }
+
+  /**
+   * @return string
+   */
+  public function getZipCode() {
+    return $this->zipCode;
+  }
+
+  /**
+   * @param string $workflowState
+   *
+   * @return $this
+   */
+  public function setWorkflowState(string $workflowState) {
+    $this->workflowState = $workflowState;
+
+    return $this;
+  }
+
+  /**
+   * @return string
+   */
+  public function getWorkflowState() {
+    return $this->workflowState;
+  }
+
+  /**
+   * @return array
+   */
+  public function getErrors() {
+    return $this->errors;
+  }
+
+  public function validate() {
+    $this->errors = [];
+    $isValid      = parent::validate();
+
+    if (!\IC\Helpers\ValidationHelper::isValidEmail($this->emailAddress)) {
+      $this->errors[] = 'Invalid Email Address';
+      $isValid        = false;
+    }
+
+    if (!\IC\Helpers\ValidationHelper::isValidPhone($this->phone)) {
+      $this->errors[] = 'Invalid Phone';
+      $isValid        = false;
+    }
+
+    //@todo More validation
+    return $isValid;
   }
 
   /**
@@ -104,9 +206,12 @@ class ShopperModel extends BaseModel implements \JsonSerializable {
    */
   function jsonSerialize() {
     return [
-        'firstName' => $this->firstName,
-        'lastName' => $this->lastName,
-        'emailAddress' => $this->emailAddress
+        'firstName'     => $this->firstName,
+        'lastName'      => $this->lastName,
+        'emailAddress'  => $this->emailAddress,
+        'phone'         => $this->phone,
+        'zipCode'       => $this->zipCode,
+        'workflowState' => $this->workflowState
     ];
   }
 }

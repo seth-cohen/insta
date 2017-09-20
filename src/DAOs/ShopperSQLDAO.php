@@ -25,8 +25,8 @@ class ShopperSQLDAO implements ShopperDAOInterface {
   public function save(\IC\Models\ShopperModel $shopper): int {
     $sql = '
       INSERT INTO applicants 
-      (first_name, last_name, email, created_at, updated_at)
-      VALUES (:firstName, :lastName, :emailAddress, DATETIME(), DATETIME());
+      (first_name, last_name, email, phone, workflow_state, created_at, updated_at)
+      VALUES (:firstName, :lastName, :emailAddress, :phone, :workflow, DATETIME(), DATETIME());
     ';
 
     $statement = $this->pdo->prepare($sql);
@@ -38,8 +38,45 @@ class ShopperSQLDAO implements ShopperDAOInterface {
     $statement->bindValue(':firstName', $shopper->getFirstName(), \PDO::PARAM_STR);
     $statement->bindValue(':lastName', $shopper->getLastName(), \PDO::PARAM_STR);
     $statement->bindValue(':emailAddress', $shopper->getEmailAddress(), \PDO::PARAM_STR);
+    $statement->bindValue(':phone', $shopper->getPhone(), \PDO::PARAM_STR);
+    $statement->bindValue(':workflow', $shopper->getWorkflowState(), \PDO::PARAM_STR);
 
     return $statement->execute() ? (int)$this->pdo->lastInsertId() : 0;
+  }
+
+  /**
+   * Persist the Shopper to the database
+   *
+   * @param \IC\Models\ShopperModel $shopper
+   *
+   * @return bool
+   */
+  public function update(\IC\Models\ShopperModel $shopper): int {
+    $sql = '
+      UPDATE applicants SET
+      first_name = :firstName, 
+      last_name = :lastName, 
+      email = :emailAddress, 
+      phone = :phone, 
+      workflow_state = :workflow, 
+      updated_at = DATETIME()
+      WHERE id = :id
+    ';
+
+    $statement = $this->pdo->prepare($sql);
+
+    if (empty($statement)) {
+      return false;
+    }
+
+    $statement->bindValue(':firstName', $shopper->getFirstName(), \PDO::PARAM_STR);
+    $statement->bindValue(':lastName', $shopper->getLastName(), \PDO::PARAM_STR);
+    $statement->bindValue(':emailAddress', $shopper->getEmailAddress(), \PDO::PARAM_STR);
+    $statement->bindValue(':phone', $shopper->getPhone(), \PDO::PARAM_STR);
+    $statement->bindValue(':workflow', $shopper->getWorkflowState(), \PDO::PARAM_STR);
+    $statement->bindValue(':id', $shopper->getId(), \PDO::PARAM_INT);
+
+    return $statement->execute();
   }
 
   /**
