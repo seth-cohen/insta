@@ -1,5 +1,5 @@
 <?php
-// whitespace
+// whitespace whitespace
 $date = new \DateTime();
 
 return [
