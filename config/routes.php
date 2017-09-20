@@ -3,11 +3,11 @@
 // View Landing
 $app->get(
     '/shopper/landing',
-    \IC\Controllers\OnboardingController::class . ':landing'
+    \IC\Controllers\ShopperOnboardingController::class . ':landing'
 )->setName('shopper-landing');
 
 // Form submit
 $app->post(
     '/shopper/landing/submit',
-    \IC\Controllers\OnboardingController::class . ':landing'
+    \IC\Controllers\ShopperOnboardingController::class . ':landing_submit'
 )->setName('shopper-landing-submit');

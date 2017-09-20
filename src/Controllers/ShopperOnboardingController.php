@@ -56,19 +56,28 @@ class ShopperOnboardingController {
 
     // See if we have a shopper in the session, if so let's pre-populate their data.
     $session = new \SlimSession\Helper();
-    $email = $session->get('shopper_email', '');
+    $email   = $session->get('shopper_email', '');
 
     if (!empty($email)) {
       $shopper = $this->shopperService->getShopperByEmail($email);
     }
 
-    $session->set('shopper_email', 'karl.gleason@example.com');
-
     return $this->view->render(
         $response,
         'shopper_landing.html',
-        ['shopper' => !empty($shopper) ? json_decode(json_encode($shopper), true) : []]
+        [
+            'shopper' => !empty($shopper) ? json_decode(json_encode($shopper), true) : [],
+            'errors'  => $args['errors'] ?? []
+        ]
     );
+  }
+
+  public function background_check(ServerRequestInterface $request, ResponseInterface $response, array $args = []) {
+
+  }
+
+  public function confirmation(ServerRequestInterface $request, ResponseInterface $response, array $args = []) {
+
   }
 
   /**
@@ -79,8 +88,22 @@ class ShopperOnboardingController {
    * @return \Psr\Http\Message\ResponseInterface
    */
   public function landing_submit(ServerRequestInterface $request, ResponseInterface $response, array $args = []) {
-    $firstName = $request->getAttribute('name');
+    // Ensure that we have all of the required fields
+    $firstName    = trim($request->getAttribute('first_name'));
+    $lastName     = trim($request->getAttribute('last_name'));
+    $emailAddress = trim($request->getAttribute('email'));
+    $phone        = trim($request->getAttribute('phone_number'));
+    $zipCode      = trim($request->getAttribute('zip'));
 
+    $errors = $this->validateInputs($firstName, $lastName, $emailAddress, $phone, $zipCode);
+
+    if (!empty($errors)) {
+      var_dump('errors we have');
+
+      return $this->landing($request, $response, ['errors' => $errors]);
+    }
+
+    // If we already have a shopper registered with that address we should not proceed
     $model = $this->shopperService->create(
         [
             'firstName'    => $firstName,
@@ -89,12 +112,6 @@ class ShopperOnboardingController {
         ]
     );
 
-    if (!$model->getId()) {
-      $this->logger->debug('Failed to create user', ['name' => $model->getFullName()]);
-// @TODO get model errors
-// return error response;
-    }
-
     return $this->view->render(
         $response,
         'shopper_landing.html',
@@ -102,4 +119,35 @@ class ShopperOnboardingController {
     );
   }
 
+  protected function validateInputs(
+      string $firstName,
+      string $lastName,
+      string $emailAddress,
+      string $phone,
+      string $zipCode
+  ) {
+    $errors = [];
+    if (empty($firstName)) {
+      $errors['firstName'] = 'Please let us know your first name so we don\'t have to be so formal.';
+    }
+
+    if (empty($lastName)) {
+      $errors['lastName'] = 'We are going to need your last name to send you those checks.';
+    }
+
+    if (empty($emailAddress) || !\IC\Helpers\InputHelper::isValidEmail($emailAddress)) {
+      $errors['emailAddress'] = 'Email Address is needed to complete sign up';
+    }
+
+    if (empty($phone) || !\IC\Helpers\InputHelper::isValidPhone($phone)) {
+      $errors['phone'] =
+          'Phone number is required. We promise not to call often, only when we have something cool to discuss';
+    }
+
+    if (empty($zipCode) || !\IC\Helpers\InputHelper::isValidZip($zipCode)) {
+      $errors['zip'] = 'Zipcode is required so we know where you\'ll be shopping';
+    }
+
+    return $errors;
+  }
 }

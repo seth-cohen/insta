@@ -45,7 +45,12 @@
         </div>
       </div>
 
-      <form class="card grey lighten-5 col s12 m6" action="/shopper/landing" method="post">
+      {% for key,value in errors %}
+        Key : {{ key }}
+        Value : {{ value }}
+      {% endfor %}
+
+      <form class="card grey lighten-5 col s12 m6" action="/shopper/landing/submit" method="post">
         <div class="row">
           <div class="input-field col s6">
             <input id="first_name" name="first_name" value="{{shopper.firstName}}" type="text" class="validate">
@@ -60,6 +65,12 @@
           <div class="input-field col s12">
             <input id="email" name="email" value="{{shopper.emailAddress}}" type="email" class="validate">
             <label for="email" data-error="Please enter valid email address">Email</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-field col s12">
+            <input id="phone" name="phone" value="{{shopper.phone}}" type="text" class="validate">
+            <label for="phone" data-error="Please enter">Phone</label>
           </div>
         </div>
         <button class="btn waves-effect waves-light green darken-2" type="submit">Submit
